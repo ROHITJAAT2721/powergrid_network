@@ -1,0 +1,34 @@
+# Build artifacts
+target/
+artifacts/
+
+# Node.js
+node_modules/
+
+# Git
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+docs/
+
+# Docker files (don't need to copy into container)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Temporary files
+tmp/
+*.tmp
+*.log

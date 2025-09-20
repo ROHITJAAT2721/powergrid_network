@@ -39,29 +39,43 @@ This repository contains the complete implementation of PowerGrid Network's core
 
 ## 🚀 **Quick Start**
 
-### **Prerequisites**
+### **🐳 Docker Setup (Recommended)**
+Run everything cross-platform with Docker:
+```bash
+# One command setup - builds and runs everything!
+docker compose up --build
+
+# Or use the helper script
+./scripts/docker-run.sh
+```
+
+See [DOCKER.md](DOCKER.md) for detailed Docker setup instructions.
+
+### **📦 Manual Setup**
+
+#### **Prerequisites**
 - Rust 1.85+ and Cargo
 - cargo-contract v6.0.0+
 - Substrate Contracts Node (for local testing)
 
-### **1. Clone and Setup**
+#### **1. Clone and Setup**
 ```bash
 git clone https://github.com/kunal-drall/powergrid_network.git
 cd powergrid_network
 ./scripts/setup.sh
 ```
 
-### **2. Build All Contracts**
+#### **2. Build All Contracts**
 ```bash
 ./scripts/build-all.sh
 ```
 
-### **3. Run Tests**
+#### **3. Run Tests**
 ```bash
 ./scripts/test-all.sh
 ```
 
-### **4. Deploy Locally**
+#### **4. Deploy Locally**
 ```bash
 # Start substrate-contracts-node in another terminal
 substrate-contracts-node --dev

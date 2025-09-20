@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Substrate Contracts Node service
+  substrate-node:
+    image: parity/substrate-contracts-node:v0.42.0
+    container_name: powergrid-substrate-node
+    ports:
+      - "9944:9944"
+      - "9933:9933"
+      - "30333:30333"
+    command: >
+      substrate-contracts-node 
+      --dev 
+      --tmp 
+      --rpc-cors all 
+      --rpc-methods=unsafe 
+      --rpc-external 
+      --ws-external
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9944"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - powergrid-network
+
+  # PowerGrid Network runner container
+  powergrid-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: powergrid-runner
+    depends_on:
+      substrate-node:
+        condition: service_healthy
+    environment:
+      - SUBSTRATE_URL=ws://substrate-node:9944
+    volumes:
+      # Mount target directory to preserve build cache between runs
+      - powergrid-target:/powergrid_network/target
+      - powergrid-cargo:/root/.cargo/registry
+    networks:
+      - powergrid-network
+    command: >
+      bash -c "
+        echo 'Waiting for substrate-contracts-node to be ready...' &&
+        sleep 10 &&
+        echo 'Starting PowerGrid Network deployment and E2E tests...' &&
+        ./scripts/deploy-and-run-e2e.sh
+      "
+
+volumes:
+  # Persistent volumes for build cache
+  powergrid-target:
+    driver: local
+  powergrid-cargo:
+    driver: local
+
+networks:
+  powergrid-network:
+    driver: bridge
