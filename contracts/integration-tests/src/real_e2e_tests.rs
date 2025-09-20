@@ -1,17 +1,16 @@
 //! End-to-End Integration Tests for PowerGrid Network
 //! 
 //! These tests deploy actual contracts and test real cross-contract interactions,
-//! state changes, and message passing in a simulated environment.
+//! state changes, and message passing using substrate-contracts-node.
 //! 
 //! Run with: cargo test --features e2e-tests
 
 #[cfg(all(test, feature = "e2e-tests"))]
 mod tests {
     use ink_e2e::{build_message, ContractsBackend};
-    use ink_e2e::subxt::tx::Signer;
     use powergrid_shared::{DeviceMetadata, DeviceType, GridEventType, ProposalType};
     
-    // Import contract references
+    // Import contract references  
     use powergrid_token::powergrid_token::PowergridTokenRef;
     use resource_registry::resource_registry::ResourceRegistryRef;
     use grid_service::grid_service::GridServiceRef;

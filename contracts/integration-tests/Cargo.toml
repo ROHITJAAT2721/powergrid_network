@@ -32,3 +32,4 @@ std = [
     "governance/std",
 ]
 e2e-tests = []
+e2e-runtime-node = []  # Use running substrate-contracts-node instead of spawning
