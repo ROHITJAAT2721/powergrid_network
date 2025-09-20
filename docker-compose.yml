@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Substrate Contracts Node service
   substrate-node:
-    image: parity/substrate-contracts-node:v0.42.0
+    image: prosopo/substrate-contracts-node:latest
     container_name: powergrid-substrate-node
     ports:
       - "9944:9944"

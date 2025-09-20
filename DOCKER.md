@@ -9,6 +9,18 @@ This guide helps you run the PowerGrid Network in a cross-platform Docker enviro
 - At least 4GB of available RAM
 - 10GB of free disk space
 
+### Validation (Recommended)
+Before building, validate your Docker setup:
+```bash
+./scripts/validate-docker.sh
+```
+
+This will check:
+- ✅ Docker and Docker Compose installation
+- ✅ Dockerfile and docker-compose.yml syntax
+- ✅ Project structure and required scripts
+- ✅ Basic Docker functionality
+
 ### 1. One-Command Setup
 ```bash
 # Run everything with Docker Compose
@@ -106,6 +118,39 @@ The `deploy-and-run-e2e.sh` script performs comprehensive testing:
 ## 🐛 Troubleshooting
 
 ### Common Issues
+
+#### 1. Substrate Node Image Not Found
+The docker-compose uses `prosopo/substrate-contracts-node:latest`. If this image is unavailable, you have alternatives:
+
+**Option A: Build substrate-contracts-node locally**
+```bash
+# Clone and build substrate-contracts-node
+git clone https://github.com/paritytech/substrate-contracts-node.git
+cd substrate-contracts-node
+docker build -t substrate-contracts-node .
+
+# Update docker-compose.yml to use local image
+# Change: image: prosopo/substrate-contracts-node:latest
+# To:     image: substrate-contracts-node:latest
+```
+
+**Option B: Use alternative Docker image**
+```bash
+# Try other available images
+docker run -p 9944:9944 blockcoders/substrate-contracts-node --dev --tmp --rpc-external --ws-external
+```
+
+**Option C: Run substrate-contracts-node outside Docker**
+```bash
+# Install substrate-contracts-node binary
+cargo install contracts-node --git https://github.com/paritytech/substrate-contracts-node.git --force --locked
+
+# Run manually
+substrate-contracts-node --dev --tmp --rpc-cors all --rpc-methods=unsafe
+
+# Then run only the PowerGrid container
+docker compose run --rm powergrid-runner
+```
 
 #### 1. SSL Certificate Errors
 If you encounter SSL/TLS certificate errors during build:
